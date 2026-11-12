@@ -64,6 +64,22 @@ return [
             ]) : [],
         ],
 
+        'hris' => [
+    'driver' => 'mysql',
+    'host' => env('HRIS_DB_HOST', '127.0.0.1'),
+    'port' => env('HRIS_DB_PORT', '3306'),
+    'database' => env('HRIS_DB_DATABASE', 'primehris_db_test'),
+    'username' => env('HRIS_DB_USERNAME', 'root'),
+    'password' => env('HRIS_DB_PASSWORD', ''),
+    'unix_socket' => '',
+    'charset' => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_ci',
+    'prefix' => '',
+    'prefix_indexes' => true,
+    'strict' => true,
+    'engine' => null,
+],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),

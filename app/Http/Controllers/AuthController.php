@@ -15,7 +15,7 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = DB::table('users')
+        $user = DB::connection('hris')->table('users')
             ->where('username', $request->username)
             ->where('status', 'active')
             ->first();
@@ -24,6 +24,18 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid username or password'], 401);
         }
 
+        $emp = DB::connection('hris')->table('hris_main')
+            ->where('id', $user->emp_id)
+            ->first();
+
+        $fullName = $emp
+            ? trim(($emp->first_name ?? '') . ' ' . ($emp->sur_name ?? ''))
+            : $user->username;
+
+        $photoUrl = ($emp && !empty($emp->picture_link))
+            ? 'https://hrmis.doh12.com/storage/app/public/' . $emp->picture_link
+            : null;
+
         return response()->json([
             'message' => 'Login successful',
             'user' => [
@@ -31,6 +43,9 @@ class AuthController extends Controller
                 'emp_id' => $user->emp_id,
                 'username' => $user->username,
                 'level' => $user->level,
+                'full_name' => $fullName ?: $user->username,
+                'position' => null, // TODO: kapag alam na ang table ng position
+                'photo_url' => $photoUrl,
             ],
         ]);
     }
